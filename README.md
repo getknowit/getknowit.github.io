@@ -39,7 +39,7 @@ Never edit the changelog or privacy policy here. Change them in the extension re
 
 ## Demo video and images
 
-- `public/demo/demo.webm`: a 12-second clip of the real extension on YouTube, recorded with Playwright and cropped. The wait for Gemini is shortened, as the caption says.
+- `public/demo/demo-light.webm` and `demo-dark.webm`: a 12-second clip, one per site theme, of the real extension on YouTube, recorded with Playwright and cropped. The wait for Gemini is shortened, as the caption says.
 - `public/og.png`: the 1200×630 link preview. Keep it under 300 KB, or WhatsApp won't show it.
 - `public/thumbs/`: video thumbnails, kept here so the page makes no requests to YouTube.
 

@@ -324,3 +324,8 @@ code, kbd { font: 0.88em var(--mono); background: var(--paper-2); border: 1px so
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Images made for one theme. */
+.only-dark { display: none !important; }
+:root[data-theme='dark'] .only-dark { display: block !important; }
+:root[data-theme='dark'] .only-light { display: none !important; }

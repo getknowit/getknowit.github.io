@@ -22,8 +22,9 @@ export const site = {
   /** The hero demo. Set `youtubeId` to swap the looping clip for a click-to-play YouTube video. */
   demo: {
     youtubeId: null as string | null,
-    video: '/demo/demo.webm',
-    poster: '/demo/poster.jpg',
+    /** One clip per site theme: the page plays the one that matches. */
+    video: { light: '/demo/demo-light.webm', dark: '/demo/demo-dark.webm' },
+    poster: { light: '/demo/poster-light.jpg', dark: '/demo/poster-dark.jpg' },
   },
 
   links: {

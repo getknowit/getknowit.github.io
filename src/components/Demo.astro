@@ -6,15 +6,34 @@ const { youtubeId, video, poster } = site.demo;
   <div class="demo-frame">
     {youtubeId ? (
       <>
-        <img src={poster} alt="" loading="eager" />
+        <img class="only-light" src={poster.light} alt="" loading="eager" />
+        <img class="only-dark" src={poster.dark} alt="" loading="lazy" />
         <button class="yt-facade" type="button" data-yt={youtubeId} aria-label="Play the Know It how-to video">
           <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" /></svg></span>
         </button>
       </>
     ) : (
-      <video autoplay muted loop playsinline preload="auto" poster={poster} aria-label="Know It on YouTube: hover a thumbnail, press Know it, read the answer.">
-        <source src={video} type="video/webm" />
+      <video autoplay muted loop playsinline preload="auto" poster={poster.light} data-demo data-light={video.light} data-dark={video.dark} data-poster-light={poster.light} data-poster-dark={poster.dark} aria-label="Know It on YouTube: hover a thumbnail, press Know it, read the answer.">
+        <source src={video.light} type="video/webm" />
       </video>
+      <script is:inline>
+        // Play the clip that matches the site's theme, now and whenever it is toggled.
+        (() => {
+          const v = document.currentScript.previousElementSibling;
+          const sync = () => {
+            const t = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+            if (v.dataset.current === t) return;
+            const first = !v.dataset.current;
+            v.dataset.current = t;
+            if (first && t === 'light') return;
+            v.poster = v.dataset['poster' + (t === 'dark' ? 'Dark' : 'Light')];
+            v.src = v.dataset[t];
+            v.play().catch(() => {});
+          };
+          sync();
+          new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        })();
+      </script>
     )}
   </div>
   <figcaption class="demo-caption"><span>Real extension, real YouTube, real answer.</span><span>{youtubeId ? 'Click to play' : 'Loading time shortened'}</span></figcaption>
