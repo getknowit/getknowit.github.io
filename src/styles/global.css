@@ -117,10 +117,10 @@ mark, .mark { background: var(--mark); color: var(--mark-text); padding: 0 0.12e
 .site-header { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid transparent; transition: border-color 0.2s; }
 .site-header.scrolled { border-bottom-color: var(--line); }
 .nav { display: flex; align-items: center; gap: 28px; height: 72px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 650 1.3rem/1 var(--serif); letter-spacing: -0.01em; }
+.brand { white-space: nowrap; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 650 1.3rem/1 var(--serif); letter-spacing: -0.01em; }
 .brand img { width: 30px; height: 30px; }
 .nav-links { display: flex; gap: 26px; margin-left: 12px; }
-.nav-links a { text-decoration: none; color: var(--ink-2); font-size: 0.96rem; }
+.nav-links a { white-space: nowrap; text-decoration: none; color: var(--ink-2); font-size: 0.96rem; }
 .nav-links a:hover { color: var(--ink); }
 .nav-end { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .icon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: transparent; cursor: pointer; color: var(--ink-2); text-decoration: none; }
@@ -135,7 +135,7 @@ mark, .mark { background: var(--mark); color: var(--mark-text); padding: 0 0.12e
 .menu-panel { position: absolute; right: 0; top: 48px; min-width: 200px; background: var(--card); border: 1.5px solid var(--ink); border-radius: 12px; box-shadow: var(--hard); padding: 8px; display: grid; }
 .menu-panel a { padding: 10px 12px; border-radius: 8px; text-decoration: none; }
 .menu-panel a:hover { background: var(--paper-2); color: var(--ink); }
-@media (max-width: 900px) { .nav-links { display: none; } .menu { display: block; } }
+@media (max-width: 1100px) { .nav-links { display: none; } .menu { display: block; } }
 @media (max-width: 760px) { .nav { gap: 12px; } .nav-end { gap: 8px; } .sponsor { padding: 8px 11px; } .sponsor span { display: none; } }
 
 /* Hero */
