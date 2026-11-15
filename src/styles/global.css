@@ -147,7 +147,7 @@ mark, .mark { background: var(--mark); color: var(--mark-text); padding: 0 0.12e
 }
 .pill b { color: var(--ink); }
 .pill .dot { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--mark); color: var(--mark-text); font-size: 0.75rem; }
-.teaser { margin: 28px 0 14px; font: 500 1.05rem/1.4 var(--serif); font-style: italic; color: var(--faint); }
+.teaser { margin: 28px 0 14px; font: 500 clamp(0.8rem, 3.9vw, 1.05rem)/1.4 var(--serif); font-style: italic; color: var(--faint); white-space: nowrap; }
 .teaser span { position: relative; }
 .teaser span::after { content: ''; position: absolute; left: -2px; right: -2px; top: 54%; height: 2px; background: var(--accent); transform-origin: left; animation: strike 0.5s 0.1s ease-out both; }
 @keyframes strike { from { transform: scaleX(0); } }
