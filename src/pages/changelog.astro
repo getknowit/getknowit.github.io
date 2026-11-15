@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { remoteMarkdown } from '../lib/remote-md';
+import { site } from '../site.config';
+// Rendered from CHANGELOG.md in the extension's repo at build time. Edit it there, never here.
+const { title, html } = await remoteMarkdown('CHANGELOG.md');
+---
+<Base title="Changelog" description="What's new in each version of Know It for YouTube.">
+  <div class="container page">
+    <article class="prose">
+      <span class="label">Release notes</span>
+      <h1>{title}</h1>
+      <p>Downloads for every version are on <a href={site.links.releases}>GitHub Releases</a>.</p>
+      <Fragment set:html={html} />
+      <p class="src">Source: <a href={`${site.links.github}/blob/main/CHANGELOG.md`}>CHANGELOG.md</a> in the Know It repository.</p>
+    </article>
+  </div>
+</Base>

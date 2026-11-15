@@ -1,0 +1,152 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site.config';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  jsonLd?: object[];
+  noindex?: boolean;
+}
+const { title, description = site.description, image = '/og.png', jsonLd = [], noindex = false } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.fullName}: ${site.tagline.replace(/\.$/, '')}`;
+const path = Astro.url.pathname.replace(/(index)?\.html$/, '').replace(/(.)\/$/, '$1');
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL(image, site.url).href;
+const ld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: site.fullName,
+    applicationCategory: 'BrowserApplication',
+    operatingSystem: 'Chrome',
+    description: site.description,
+    url: site.url,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    author: { '@type': 'Person', name: site.author },
+  },
+  ...jsonLd,
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#fbf7f2" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/png" href="/favicon-64.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.fullName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A clickbait YouTube title, crossed out, with Know It's answer highlighted." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    <script is:inline>
+      try { if (localStorage.getItem('theme') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      const root = document.documentElement;
+
+      // Light by default; dark only when picked.
+      document.querySelector('[data-theme-toggle]')?.addEventListener('click', () => {
+        const dark = root.dataset.theme !== 'dark';
+        if (dark) root.dataset.theme = 'dark'; else delete root.dataset.theme;
+        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
+      });
+
+      // A line under the header once the page scrolls.
+      const header = document.querySelector('.site-header');
+      const onScroll = () => header?.classList.toggle('scrolled', scrollY > 8);
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // Close the mobile menu after picking a link.
+      document.querySelectorAll<HTMLAnchorElement>('.menu-panel a').forEach((a) =>
+        a.addEventListener('click', () => a.closest('details')?.removeAttribute('open')));
+
+      document.addEventListener('click', async (event) => {
+        const target = event.target as HTMLElement;
+
+        // Phones can't install extensions: send the link to a computer instead.
+        const send = target.closest<HTMLButtonElement>('[data-send]');
+        if (send) {
+          const url = send.dataset.send!;
+          try {
+            if (navigator.share) await navigator.share({ title: 'Know It for YouTube', text: 'Get the answer to a YouTube headline without opening the video:', url });
+            else { await navigator.clipboard.writeText(url); flash(send, 'Link copied'); }
+          } catch { /* Share sheet closed */ }
+          return;
+        }
+
+        // "Titles, answered": reveal the answer.
+        const know = target.closest<HTMLButtonElement>('[data-know]');
+        if (know) {
+          const card = know.closest<HTMLElement>('.tcard');
+          if (card) { card.dataset.open = ''; card.querySelector<HTMLElement>('.answer')?.focus(); }
+          return;
+        }
+
+        // Install tabs.
+        const tab = target.closest<HTMLButtonElement>('[role="tab"]');
+        if (tab) {
+          const list = tab.closest('[role="tablist"]')!;
+          list.querySelectorAll<HTMLButtonElement>('[role="tab"]').forEach((t) => {
+            const on = t === tab;
+            t.setAttribute('aria-selected', String(on));
+            document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+          });
+          return;
+        }
+
+        // Click-to-play YouTube: nothing loads from YouTube until this click.
+        const facade = target.closest<HTMLButtonElement>('[data-yt]');
+        if (facade) {
+          const frame = document.createElement('iframe');
+          frame.src = `https://www.youtube-nocookie.com/embed/${facade.dataset.yt}?autoplay=1&rel=0`;
+          frame.title = facade.getAttribute('aria-label') ?? 'Video';
+          frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+          frame.allowFullscreen = true;
+          facade.parentElement!.replaceChildren(frame);
+        }
+      });
+
+      function flash(button: HTMLButtonElement, text: string) {
+        const old = button.innerHTML;
+        button.textContent = text;
+        setTimeout(() => (button.innerHTML = old), 1600);
+      }
+    </script>
+    <style is:global>
+      .skip { position: absolute; left: -9999px; }
+      .skip:focus { left: 16px; top: 12px; z-index: 100; background: var(--card); padding: 8px 12px; border-radius: 8px; }
+    </style>
+  </body>
+</html>

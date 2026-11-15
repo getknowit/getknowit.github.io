@@ -1,0 +1,12 @@
+{
+  "_note": "Real quotes go in `quotes` (name, role, text, optional avatar). Each one replaces a 'stop saying' card, so the wall always has 6.",
+  "quotes": [],
+  "stopSaying": [
+    { "text": "Eleven minutes to find out the movie was one I'd already seen.", "ctx": "after a “best movie you've never seen” video" },
+    { "text": "Wait, the ‘one stock’ was in the first minute all along?", "ctx": "after a “buy every share you can” video" },
+    { "text": "Just tell me the price. Please. Just the price.", "ctx": "after a flat tour" },
+    { "text": "I'll watch it later.", "ctx": "you won't. You'll know it now." },
+    { "text": "Skip, skip, skip… ah, there it is. At 12:40.", "ctx": "dragging the progress bar" },
+    { "text": "That could have been one sentence.", "ctx": "every clickbait video, ever" }
+  ]
+}

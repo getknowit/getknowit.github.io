@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import { remoteMarkdown } from '../lib/remote-md';
+import { site } from '../site.config';
+// Rendered from store/privacy-policy.md in the extension's repo at build time. Edit it there, never here.
+const file = 'store/privacy-policy.md';
+const { title, html } = await remoteMarkdown(file);
+---
+<Base title="Privacy" description="Know It has no servers, no analytics and no account. What it sends to Google, and what stays in your browser.">
+  <div class="container page">
+    <article class="prose">
+      <span class="label">Legal</span>
+      <h1>{title}</h1>
+      <Fragment set:html={html} />
+      <p class="src">Source: <a href={`${site.links.github}/blob/main/${file}`}>{file}</a> in the Know It repository.</p>
+    </article>
+  </div>
+</Base>

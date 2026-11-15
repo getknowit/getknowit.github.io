@@ -1,0 +1,266 @@
+---
+import Base from '../layouts/Base.astro';
+import InstallButton from '../components/InstallButton.astro';
+import Demo from '../components/Demo.astro';
+import ChromeLogo from '../components/ChromeLogo.astro';
+import titles from '../data/titles.json';
+import sayings from '../data/sayings.json';
+import { faq } from '../data/faq';
+import { proof } from '../lib/proof';
+import { site } from '../site.config';
+
+const numbers = await proof();
+
+/** Answers use **bold** for the words the extension highlights. */
+const escape = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+const highlight = (s: string) => escape(s).replace(/\*\*(.+?)\*\*/g, '<mark>$1</mark>');
+
+// Six cards: real quotes first, then "things you'll stop saying" to fill the rest.
+type Quote = { name: string; role?: string; text: string; avatar?: string };
+const quotes = (sayings.quotes as Quote[]).slice(0, 6);
+const fillers = sayings.stopSaying.slice(0, 6 - quotes.length);
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a.join(' ') } })),
+};
+---
+<Base jsonLd={[faqLd]}>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        {numbers.milestone ? (
+          <a class="pill" href={site.links.releases}><span class="dot">↓</span><b>{numbers.milestone}</b> downloads{site.store.rating && <> · ★ {site.store.rating}</>}</a>
+        ) : (
+          <span class="pill"><span class="dot">✦</span>Free · open source · no account</span>
+        )}
+        <p class="teaser" aria-hidden="true"><span>“You won't believe what this flat really costs…”</span></p>
+        <h1>Know the <span class="swipe">answer</span><br />before you click.</h1>
+        <p class="lede">Hover any YouTube title. Press Know it. See what it's hiding.</p>
+        <InstallButton />
+      </div>
+      <Demo />
+    </div>
+  </section>
+
+  <!-- Titles, answered -->
+  <section class="section tint" id="titles">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">Titles, answered</span>
+        <h2>Six real clickbait titles.<br />Go on, press Know it.</h2>
+        <p>These are real answers Know It gave for these videos, not written by us.</p>
+      </div>
+      <div class="wall">
+        {titles.map((t) => (
+          <article class="tcard">
+            <div class="thumb">
+              <img src={`/thumbs/${t.id}.jpg`} alt="" width="640" height="360" loading="lazy" decoding="async" />
+              <span class="dur">{t.duration}</span>
+              <button class="know-btn" type="button" data-know aria-label={`Know it: ${t.title}`}>
+                <svg viewBox="0 0 24 24" fill="#ffb38a" aria-hidden="true"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z" /></svg>Know it
+              </button>
+            </div>
+            <div class="body">
+              <p class="title">{t.title}</p>
+              <p class="meta">{t.channel} · {t.duration} to find out</p>
+              <div class="answer" tabindex="-1">
+                <p class="q">{t.question}</p>
+                <p set:html={highlight(t.answer)} />
+                <a href={`https://www.youtube.com/watch?v=${t.id}`} rel="noopener">Watch it anyway ↗</a>
+              </div>
+              <p class="hint">Answer hidden. Press <b>Know it</b>.</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="wall-foot">
+        <InstallButton note={false} />
+        <span class="muted small">Works on any public YouTube video.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section" id="how">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">How it works</span>
+        <h2>Three steps. The first one, once.</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="n">01</div>
+          <h3>Add a free Gemini key</h3>
+          <p>Get one from Google AI Studio in about a minute and paste it in. It stays in your browser.</p>
+        </div>
+        <div class="step">
+          <div class="n">02</div>
+          <h3>Hover a thumbnail</h3>
+          <p>A small <b>Know it</b> button appears on the video. Press it, then keep scrolling.</p>
+        </div>
+        <div class="step">
+          <div class="n">03</div>
+          <h3>Read the answer</h3>
+          <p>The film, the stock, the price, with a timestamp to check it in the video.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section tint" id="features">
+    <div class="container">
+      <div class="rows">
+        <div class="row">
+          <div class="row-text">
+            <span class="label">On every thumbnail</span>
+            <h3>The button shows up where your mouse already is.</h3>
+            <p>Search results, Home, Subscriptions, the sidebar. Hover a video and Know it is right there on the thumbnail.</p>
+          </div>
+          <img class="row-shot" src="/shots/1-know-it-button.jpg" alt="YouTube search results with a Know it button on the first thumbnail." width="760" height="475" loading="lazy" />
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <span class="label">Keep scrolling</span>
+            <h3>Ask about a few. They answer in the background.</h3>
+            <p>A ring shows which ones are still working. A spark marks the ones that are ready.</p>
+          </div>
+          <img class="row-shot" src="/shots/2-loading-and-ready.jpg" alt="Two thumbnails: one with a ready mark, one still loading." width="760" height="475" loading="lazy" />
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <span class="label">The answer</span>
+            <h3>The point first. The proof right under it.</h3>
+            <p>One clear line, the key facts highlighted, a few supporting points, and a timestamp that jumps to the moment it's said.</p>
+          </div>
+          <img class="row-shot" src="/shots/3-answer.jpg" alt="Know It's answer card over a YouTube video, with the key words highlighted." width="1280" height="800" loading="lazy" />
+        </div>
+        <div class="row">
+          <div class="row-text">
+            <span class="label">Today's answers</span>
+            <h3>Everything you asked today, and the minutes it saved you.</h3>
+            <p>Open it from YouTube's top bar or Chrome's toolbar. Answers are kept for 24 hours.</p>
+          </div>
+          <img class="row-shot" src="/shots/4-panel.jpg" alt="The Today's answers panel listing saved answers and minutes saved." width="1280" height="800" loading="lazy" />
+        </div>
+      </div>
+      <div class="extras">
+        <div>
+          <h3>On the watch page and in Shorts</h3>
+          <p>A button beside Like and one inside the Shorts player, for the video you're on.</p>
+        </div>
+        <div>
+          <h3>Auto, if you want it</h3>
+          <p>Off by default. Turn it on and videos under 30 minutes are answered 5 seconds after you open them.</p>
+        </div>
+        <div>
+          <h3>Private by design</h3>
+          <p>No account, no analytics, no servers of ours. Your key and answers stay in your browser. <a href="/privacy">Privacy policy</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sayings / testimonials -->
+  <section class="section" id="sayings">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">{quotes.length >= 3 ? 'What people say' : "Things you'll stop saying"}</span>
+        <h2>{quotes.length >= 3 ? 'From people who stopped clicking.' : "You've said at least three of these."}</h2>
+      </div>
+      <div class="sayings">
+        {quotes.map((q) => (
+          <figure class="saying" style="margin:0">
+            <blockquote>{q.text}</blockquote>
+            <figcaption class="who">
+              {q.avatar && <img src={q.avatar} alt="" width="36" height="36" loading="lazy" />}
+              <div><b>{q.name}</b>{q.role && <span>{q.role}</span>}</div>
+            </figcaption>
+          </figure>
+        ))}
+        {fillers.map((s) => (
+          <figure class="saying" style="margin:0">
+            <blockquote>{s.text}</blockquote>
+            <figcaption class="ctx">— {s.ctx}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Install -->
+  <section class="section tint" id="install">
+    <div class="container install-grid">
+      <div>
+        <span class="label">Install</span>
+        <h2 style="margin-bottom:18px">Set up in about two minutes.</h2>
+        <p class="muted" style="max-width:44ch">Know It runs in Chrome on a computer. You'll need a free Gemini key from Google, which takes about a minute.</p>
+        <p class="install-note only-touch" style="margin-top:22px"><button class="btn btn-install" type="button" data-send={site.url}><ChromeLogo />Send to my computer</button></p>
+      </div>
+      <div class="panel">
+        <div class="tabs" role="tablist" aria-label="How to install">
+          <button role="tab" id="tab-store" aria-controls="panel-store" aria-selected={site.store.url ? 'true' : 'false'}>Chrome Web Store</button>
+          <button role="tab" id="tab-zip" aria-controls="panel-zip" aria-selected={site.store.url ? 'false' : 'true'}>Load unpacked</button>
+        </div>
+        <div class="tabpanel" id="panel-store" role="tabpanel" aria-labelledby="tab-store" hidden={!site.store.url}>
+          {site.store.url ? (
+            <ol class="steps-list">
+              <li><span>Open <a href={site.store.url}><b>Know It on the Chrome Web Store</b></a> and press <b>Add to Chrome</b>.</span></li>
+              <li><span>Open YouTube and press <b>Know it</b> on any thumbnail.</span></li>
+              <li><span>Paste your Gemini key when asked (steps below).</span></li>
+            </ol>
+          ) : (
+            <p class="muted">Know It is on its way to the Chrome Web Store. Until then, install it from the zip in the <b>Load unpacked</b> tab. It's the same extension.</p>
+          )}
+        </div>
+        <div class="tabpanel" id="panel-zip" role="tabpanel" aria-labelledby="tab-zip" hidden={!!site.store.url}>
+          <ol class="steps-list">
+            <li><span>Download <a href={site.links.zip}><b>know-it.zip</b></a> and unzip it.</span></li>
+            <li><span>Open <code>chrome://extensions</code> and turn on <b>Developer mode</b>, top right.</span></li>
+            <li><span>Press <b>Load unpacked</b> and choose the unzipped folder.</span></li>
+          </ol>
+        </div>
+        <h3 style="margin:32px 0 16px">Get your Gemini key</h3>
+        <ol class="steps-list">
+          <li><span>Open <a href={site.links.getKey}><b>Google AI Studio</b></a> and sign in with Google.</span></li>
+          <li><span>Press <b>Create API key</b> and copy it.</span></li>
+          <li><span>Press <b>Know it</b> on any video and paste the key in. Done.</span></li>
+        </ol>
+        <p class="note"><b>In the EU, the UK or Switzerland?</b> Google doesn't give free keys there. Turn on billing for your key in AI Studio and it works the same.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="label">FAQ</span>
+        <h2>Fair questions.</h2>
+      </div>
+      <div class="faq">
+        {faq.map(({ q, a }) => (
+          <details>
+            <summary>{q}</summary>
+            <div class="a">{a.map((p) => <p>{p}</p>)}</div>
+          </details>
+        ))}
+      </div>
+      <p class="muted" style="margin-top:28px">Something else? <a href="/support">Ask on Support</a>.</p>
+    </div>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing">
+    <div class="container closing-row">
+      <h2>Stop clicking to <span class="swipe">find out</span>.</h2>
+      <div>
+        <div class="actions"><InstallButton note={false} /><a class="sponsor" style="padding:13px 20px;font-size:1rem" href={site.links.sponsor}><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.6-4.7-9.8-8.6C.4 9 2.2 5 6 5c2.2 0 3.6 1.2 4.5 2.4C11.4 6.2 12.8 5 15 5c3.8 0 5.6 4 3.8 7.4C16.6 16.3 12 21 12 21z"/></svg>Sponsor</a></div>
+        <p class="install-note only-desk">Free · no account · your own Gemini key</p>
+      </div>
+    </div>
+  </section>
+</Base>

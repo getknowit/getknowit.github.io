@@ -1,0 +1,21 @@
+---
+import { site } from '../site.config';
+const { youtubeId, video, poster } = site.demo;
+---
+<figure class="demo" style="margin:0">
+  <div class="demo-frame">
+    {youtubeId ? (
+      <>
+        <img src={poster} alt="" loading="eager" />
+        <button class="yt-facade" type="button" data-yt={youtubeId} aria-label="Play the Know It how-to video">
+          <span class="play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4l15 8-15 8z" /></svg></span>
+        </button>
+      </>
+    ) : (
+      <video autoplay muted loop playsinline preload="auto" poster={poster} aria-label="Know It on YouTube: hover a thumbnail, press Know it, read the answer.">
+        <source src={video} type="video/webm" />
+      </video>
+    )}
+  </div>
+  <figcaption class="demo-caption"><span>Real extension, real YouTube, real answer.</span><span>{youtubeId ? 'Click to play' : 'Loading time shortened'}</span></figcaption>
+</figure>

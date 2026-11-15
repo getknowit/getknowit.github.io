@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+const fixes = [
+  { q: 'It says my key was refused', a: 'Check you copied the whole key from Google AI Studio, then paste it again under Settings in the Know It panel.' },
+  { q: 'It says Google doesn’t allow free keys where I am', a: 'In the EU, the UK and Switzerland, turn on billing for your key in Google AI Studio. Then press Try again.' },
+  { q: 'I don’t see the Know it button', a: 'Reload the YouTube tab. If it’s still missing, YouTube may have changed its page: please report it, and it’s usually fixed within a day without an update.' },
+  { q: 'It stopped after a few long videos', a: 'Google’s free tier briefly refuses requests after several long videos. Wait a minute and press Try again. It also allows 8 hours of video a day.' },
+];
+---
+<Base title="Support" description="Get help with Know It for YouTube: report a bug, ask a question, or get in touch.">
+  <div class="container page">
+    <div class="section-head">
+      <span class="label">Support</span>
+      <h1 style="font-size:clamp(2.4rem,4.4vw,3.6rem)">How can we help?</h1>
+    </div>
+    <div class="cards3">
+      <a class="link-card" href={site.links.issues}>
+        <h3>Report a bug</h3>
+        <p>Something broken or a wrong answer? Open an issue with the video link.</p>
+        <span class="go">Open an issue →</span>
+      </a>
+      <a class="link-card" href={site.links.discussions}>
+        <h3>Questions and ideas</h3>
+        <p>Ask how something works, or suggest what Know It should do next.</p>
+        <span class="go">Start a discussion →</span>
+      </a>
+      <a class="link-card" href={site.links.email}>
+        <h3>Email</h3>
+        <p>For anything you'd rather not post in public.</p>
+        <span class="go">Send an email →</span>
+      </a>
+    </div>
+    <div class="section-head" style="margin-top:88px">
+      <span class="label">Before you write in</span>
+      <h2>Quick fixes</h2>
+    </div>
+    <div class="faq">
+      {fixes.map(({ q, a }) => (
+        <details>
+          <summary>{q}</summary>
+          <div class="a"><p>{a}</p></div>
+        </details>
+      ))}
+    </div>
+    <p class="muted" style="margin-top:28px">More answers in the <a href="/#faq">FAQ</a>.</p>
+  </div>
+</Base>

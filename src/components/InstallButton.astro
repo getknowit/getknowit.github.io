@@ -1,0 +1,20 @@
+---
+import ChromeLogo from './ChromeLogo.astro';
+import { installHref, site } from '../site.config';
+interface Props { small?: boolean; note?: boolean; }
+const { small = false, note = true } = Astro.props;
+---
+<a class:list={['btn btn-install only-desk', { 'btn-small': small }]} href={installHref}>
+  <ChromeLogo />{small ? 'Add to Chrome' : 'Install on Chrome'}
+</a>
+{!small && (
+  <button class="btn btn-install only-touch" type="button" data-send={site.url}>
+    <ChromeLogo />Send to my computer
+  </button>
+)}
+{note && !small && (
+  <>
+    <p class="install-note only-desk">Free · no account · works with your own Gemini key</p>
+    <p class="install-note only-touch">Know It runs in Chrome on a computer. Send yourself the link.</p>
+  </>
+)}

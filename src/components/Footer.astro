@@ -1,0 +1,44 @@
+---
+import { site } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="/"><img src="/icon.png" alt="" width="30" height="30" />{site.name}</a>
+        <p>Get the answer to a YouTube headline without opening the video.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="/#install">Install</a></li>
+          <li><a href="/#how">How it works</a></li>
+          <li><a href="/changelog">Changelog</a></li>
+          <li><a href={site.links.releases}>Releases</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Help</h4>
+        <ul>
+          <li><a href="/support">Support</a></li>
+          <li><a href={site.links.discussions}>Discussions</a></li>
+          <li><a href={site.links.issues}>Report a bug</a></li>
+          <li><a href={site.links.sponsor}>Sponsor ♥</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href={site.links.license}>License</a></li>
+          <li><a href={site.links.github}>Source on GitHub</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© {year} {site.author}</span>
+      <span>Not affiliated with YouTube or Google.</span>
+    </div>
+  </div>
+</footer>
