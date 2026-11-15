@@ -4,7 +4,7 @@ const github = 'https://github.com/arpitagarwal1301/youtube-summary';
 export const site = {
   name: 'Know It',
   fullName: 'Know It for YouTube',
-  url: 'https://knowit-app.github.io',
+  url: 'https://getknowit.github.io',
   /** The extension's public repo: changelog, privacy policy and releases are read from it at build time. */
   repo: 'arpitagarwal1301/youtube-summary',
   author: 'Arpit Agarwal',

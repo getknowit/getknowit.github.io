@@ -1,6 +1,6 @@
 # Know It website
 
-The website for [Know It for YouTube](https://github.com/arpitagarwal1301/youtube-summary), the Chrome extension that answers clickbait YouTube titles. Live at **https://knowit-app.github.io**.
+The website for [Know It for YouTube](https://github.com/arpitagarwal1301/youtube-summary), the Chrome extension that answers clickbait YouTube titles. Live at **https://getknowit.github.io**.
 
 Static [Astro](https://astro.build) site on GitHub Pages. No analytics, no cookies, and nothing loads from another site until a visitor presses play on a YouTube video.
 
