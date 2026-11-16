@@ -14,7 +14,7 @@ export const site = {
 
   /** Chrome Web Store. Set `url` once the listing is live; `users` and `rating` once it shows them. */
   store: {
-    url: null as string | null,
+    url: 'https://chromewebstore.google.com/detail/know-it-for-youtube/nilkfcjmledjkedlljnggfohkpbibigc' as string | null,
     users: 0,
     rating: null as number | null,
   },
